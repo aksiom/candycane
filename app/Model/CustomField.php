@@ -20,7 +20,7 @@ class CustomField extends AppModel
 
         ),
         'default_value' => array(
-            'validates_invalid_of' => array('rule' => array('validate_default_value')),
+            'validates_invalid_of' => array('rule' => array('validate_default_value'), 'allowEmpty' => true),
         ),
     );
 
