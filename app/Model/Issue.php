@@ -284,16 +284,20 @@ class Issue extends AppModel
       # custom fields changes
       if(!empty($this->data[$this->alias]['custom_field_values'])) {
         foreach($this->data[$this->alias]['custom_field_values'] as $field_id => $field_value) {
-          if (array_key_exists($field_id, $this->custom_values_before_change) 
-          && ($this->custom_values_before_change[$field_id]==$field_value)) { 
+          if (!array_key_exists($field_id, $this->custom_values_before_change)) {
+            $this->custom_values_before_change[$field_id] = null;
+          }
+          
+          if ($this->custom_values_before_change[$field_id] == $field_value) { 
             continue;
           }
+          
           foreach($this->Journal->available_custom_fields as $custom_field) {
             if($custom_field['CustomField']['id'] == $field_id) {
               $journalDetails[] = array(
                 'property' => 'cf', 
                 'prop_key' => $field_id,
-                'old_value'=> array_key_exists($field_id, $this->custom_values_before_change) ? $this->custom_values_before_change[$field_id] : null,
+                'old_value'=> $this->custom_values_before_change[$field_id],
                 'value' => $field_value
               );
               break;
